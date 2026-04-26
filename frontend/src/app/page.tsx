@@ -88,12 +88,12 @@ export default function Home() {
 
           <motion.div variants={itemVariants} style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/dashboard">
-              <button className="primary-button flex-center" style={{ gap: '12px', fontSize: '1.1rem', padding: '16px 40px' }}>
+              <button className="primary-button hero-btn" style={{ gap: '12px' }}>
                 Launch Mission Control <ArrowRight size={20} />
               </button>
             </Link>
             <Link href="/dashboard/neural">
-              <button className="glass-button" style={{ padding: '16px 40px' }}>
+              <button className="glass-button hero-btn">
                 View Neural Roadmap
               </button>
             </Link>

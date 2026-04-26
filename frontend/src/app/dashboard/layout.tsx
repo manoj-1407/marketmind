@@ -3,15 +3,18 @@
 import Sidebar from '@/components/Sidebar';
 import Topbar from '@/components/Topbar';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-dark)' }}>
+    <div className={`dashboard-container ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
       {/* Sidebar Component */}
-      <Sidebar />
+      <Sidebar collapsed={isCollapsed} setCollapsed={setIsCollapsed} />
 
       {/* Main Content Area */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+      <div className="dashboard-main" style={{ marginLeft: isCollapsed ? '80px' : '280px' }}>
         {/* Topbar Component */}
         <Topbar />
 
@@ -20,7 +23,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           flex: 1, 
           padding: '40px', 
           overflowY: 'auto', 
-          backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.05), transparent 50%)' 
+          backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.05), transparent 50%)' 
         }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

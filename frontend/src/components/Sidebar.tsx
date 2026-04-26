@@ -6,9 +6,13 @@ import { Brain, LayoutDashboard, Target, Presentation, UserCheck, Settings, LogO
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-export default function Sidebar() {
+interface SidebarProps {
+  collapsed?: boolean;
+  setCollapsed?: (val: boolean) => void;
+}
+
+export default function Sidebar({ collapsed = false, setCollapsed }: SidebarProps) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -37,7 +41,7 @@ export default function Sidebar() {
       {/* Collapse Toggle (Desktop Only) */}
       {!isMobile && (
         <button 
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => setCollapsed?.(!collapsed)}
           style={{
             position: 'absolute',
             right: '-12px',
@@ -63,12 +67,25 @@ export default function Sidebar() {
       )}
 
       {/* Brand */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '32px 24px', marginBottom: '16px' }}>
-        <div style={{ background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', borderRadius: '12px', padding: '8px', boxShadow: '0 0 20px var(--glow-primary)' }}>
-          <Brain size={24} color="white" />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '32px 24px', marginBottom: '16px' }}>
+        <div style={{ 
+          background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', 
+          borderRadius: '10px', 
+          padding: '10px', 
+          boxShadow: '0 0 20px var(--glow-primary)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0
+        }}>
+          <Brain size={22} color="white" />
         </div>
         {(!collapsed || isMobile) && (
-          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontSize: '1.25rem', fontWeight: 900, letterSpacing: '1px' }}>
+          <motion.span 
+            initial={{ opacity: 0, x: -10 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '1px', whiteSpace: 'nowrap' }}
+          >
             NEXUS<span className="text-gradient">OS</span>
           </motion.span>
         )}
@@ -169,7 +186,7 @@ export default function Sidebar() {
                 animate={{ x: 0 }}
                 exit={{ x: '-100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                style={{ position: 'fixed', left: 0, top: 0, bottom: 0, width: '280px', background: 'var(--background-dark)', zIndex: 102, borderRight: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column' }}
+                style={{ position: 'fixed', left: 0, top: 0, bottom: 0, width: '280px', background: 'rgba(2, 2, 2, 0.95)', backdropFilter: 'blur(40px)', zIndex: 102, borderRight: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column' }}
               >
                 <button onClick={() => setMobileOpen(false)} style={{ position: 'absolute', right: '20px', top: '30px', color: 'var(--text-secondary)', background: 'none', border: 'none' }}>
                   <X size={24} />
@@ -192,12 +209,14 @@ export default function Sidebar() {
         borderRight: '1px solid var(--glass-border)',
         display: 'flex',
         flexDirection: 'column',
-        background: 'rgba(2, 2, 2, 0.8)',
-        backdropFilter: 'blur(30px)',
-        position: 'relative',
-        zIndex: 50,
-        height: '100vh',
-        overflow: 'hidden'
+        background: 'rgba(2, 2, 2, 0.9)',
+        backdropFilter: 'blur(40px)',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        zIndex: 100,
+        overflow: 'visible'
       }}
     >
       <SidebarContent />

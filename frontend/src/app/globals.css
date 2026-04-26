@@ -1,21 +1,22 @@
 :root {
-  --background-dark: #050505;
-  --background-light: #0f0f13;
+  --background-dark: #020202; /* Deeper Black */
+  --background-light: #08080a;
   --text-primary: #ffffff;
-  --text-secondary: #a1a1aa;
-  --accent-primary: #7c3aed; /* Vibrant Purple */
-  --accent-secondary: #ec4899; /* Vibrant Pink */
-  --accent-tertiary: #06b6d4; /* Vibrant Cyan */
-  --glow-primary: rgba(124, 58, 237, 0.4);
-  --glow-secondary: rgba(236, 72, 153, 0.4);
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --text-secondary: #71717a;
+  --accent-primary: #8b5cf6; /* Electric Violet */
+  --accent-secondary: #f43f5e; /* Cyber Rose */
+  --accent-tertiary: #0ea5e9; /* Sky Blue */
+  --glow-primary: rgba(139, 92, 246, 0.5);
+  --glow-secondary: rgba(244, 63, 94, 0.5);
+  --glass-bg: rgba(255, 255, 255, 0.02);
+  --glass-border: rgba(255, 255, 255, 0.05);
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  cursor: crosshair !important; /* Cyberpunk feel */
 }
 
 body {

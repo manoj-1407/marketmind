@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Brain, LayoutDashboard, Target, Presentation, UserCheck, Settings, LogOut, ChevronRight } from 'lucide-react';
+import { Brain, LayoutDashboard, Target, Presentation, UserCheck, Settings, LogOut, ChevronRight, Search, Zap, ListTodo, Activity, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -10,11 +10,17 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
-  const navItems = [
-    { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+  const primaryNav = [
+    { name: 'Nexus Overview', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Campaign Architect', href: '/dashboard/campaigns', icon: Target },
     { name: 'Pitch Decks', href: '/dashboard/pitches', icon: Presentation },
-    { name: 'Lead Intelligence', href: '/dashboard/leads', icon: UserCheck },
+  ];
+
+  const nexusNav = [
+    { name: 'Lead Discovery', href: '/dashboard/discover', icon: Globe },
+    { name: 'Competitor Ghost', href: '/dashboard/competitors', icon: Zap },
+    { name: 'Strategy Execution', href: '/dashboard/execution', icon: ListTodo },
+    { name: 'Neural Hub', href: '/dashboard/neural', icon: Activity },
   ];
 
   return (
@@ -26,8 +32,8 @@ export default function Sidebar() {
         borderRight: '1px solid var(--glass-border)',
         display: 'flex',
         flexDirection: 'column',
-        background: 'rgba(5, 5, 5, 0.6)',
-        backdropFilter: 'blur(20px)',
+        background: 'rgba(2, 2, 2, 0.8)',
+        backdropFilter: 'blur(30px)',
         position: 'relative',
         zIndex: 50,
         height: '100vh',
@@ -52,7 +58,7 @@ export default function Sidebar() {
           cursor: 'pointer',
           color: 'white',
           zIndex: 60,
-          boxShadow: '0 0 10px var(--glow-primary)'
+          boxShadow: '0 0 15px var(--glow-primary)'
         }}
       >
         <motion.div animate={{ rotate: collapsed ? 180 : 0 }}>
@@ -62,76 +68,84 @@ export default function Sidebar() {
 
       {/* Brand */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '32px 24px', marginBottom: '16px' }}>
-        <div style={{ background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', borderRadius: '12px', padding: '8px', boxShadow: '0 0 15px var(--glow-primary)' }}>
+        <div style={{ background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', borderRadius: '12px', padding: '8px', boxShadow: '0 0 20px var(--glow-primary)' }}>
           <Brain size={24} color="white" />
         </div>
         {!collapsed && (
-          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ fontSize: '1.25rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-            Market<span className="text-gradient">Mind</span>
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontSize: '1.25rem', fontWeight: 900, letterSpacing: '1px' }}>
+            NEXUS<span className="text-gradient">OS</span>
           </motion.span>
         )}
       </div>
 
       {/* Navigation */}
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, padding: '0 16px' }}>
-        {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link key={item.name} href={item.href} style={{ textDecoration: 'none' }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? 'linear-gradient(90deg, rgba(124, 58, 237, 0.15), transparent)' : 'transparent',
-                color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                borderLeft: isActive ? '3px solid var(--accent-primary)' : '3px solid transparent',
-                transition: 'all 0.2s ease',
-                position: 'relative',
-                overflow: 'hidden'
-              }} className="sidebar-link">
-                <item.icon size={22} color={isActive ? 'var(--accent-primary)' : 'currentColor'} style={{ minWidth: '22px' }} />
-                {!collapsed && (
-                  <span style={{ fontWeight: isActive ? 600 : 500, whiteSpace: 'nowrap' }}>{item.name}</span>
-                )}
-                {isActive && (
-                  <motion.div layoutId="active-indicator" style={{ position: 'absolute', left: -3, top: 0, bottom: 0, width: 3, background: 'var(--accent-primary)', boxShadow: '0 0 10px var(--accent-primary)' }} />
-                )}
-              </div>
-            </Link>
-          );
-        })}
-      </nav>
+      <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '0 16px' }} className="custom-scrollbar">
+        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 700, marginBottom: '12px', paddingLeft: '16px', opacity: collapsed ? 0 : 1 }}>Core Engines</p>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '32px' }}>
+          {primaryNav.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link key={item.name} href={item.href} style={{ textDecoration: 'none' }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px',
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  background: isActive ? 'rgba(139, 92, 246, 0.1)' : 'transparent',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  border: isActive ? '1px solid var(--glass-border)' : '1px solid transparent',
+                  transition: 'all 0.2s ease'
+                }} className="sidebar-link">
+                  <item.icon size={20} color={isActive ? 'var(--accent-primary)' : 'currentColor'} />
+                  {!collapsed && <span style={{ fontWeight: isActive ? 700 : 500, fontSize: '0.9rem' }}>{item.name}</span>}
+                </div>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 700, marginBottom: '12px', paddingLeft: '16px', opacity: collapsed ? 0 : 1 }}>Nexus Domain</p>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {nexusNav.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link key={item.name} href={item.href} style={{ textDecoration: 'none' }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px',
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  background: isActive ? 'rgba(244, 63, 94, 0.1)' : 'transparent',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                  border: isActive ? '1px solid var(--glass-border)' : '1px solid transparent',
+                  transition: 'all 0.2s ease'
+                }} className="sidebar-link">
+                  <item.icon size={20} color={isActive ? 'var(--accent-secondary)' : 'currentColor'} />
+                  {!collapsed && <span style={{ fontWeight: isActive ? 700 : 500, fontSize: '0.9rem' }}>{item.name}</span>}
+                </div>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
 
       {/* Bottom Section */}
       <div style={{ padding: '24px 16px', borderTop: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <Link href="/dashboard/settings" style={{ textDecoration: 'none' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', color: pathname === '/dashboard/settings' ? 'var(--accent-primary)' : 'var(--text-secondary)', borderRadius: '12px', transition: 'all 0.2s ease' }} className="sidebar-link">
-            <Settings size={22} />
-            {!collapsed && <span style={{ fontWeight: 500, whiteSpace: 'nowrap' }}>Settings</span>}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', color: 'var(--text-secondary)', borderRadius: '12px' }} className="sidebar-link">
+            <Settings size={20} />
+            {!collapsed && <span style={{ fontWeight: 500, fontSize: '0.9rem' }}>System Config</span>}
           </div>
         </Link>
         <Link href="/" style={{ textDecoration: 'none' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', color: 'var(--text-secondary)', borderRadius: '12px', transition: 'all 0.2s ease' }} className="sidebar-link">
-            <LogOut size={22} />
-            {!collapsed && <span style={{ fontWeight: 500, whiteSpace: 'nowrap' }}>Exit</span>}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '12px 16px', color: 'var(--text-secondary)', borderRadius: '12px' }} className="sidebar-link">
+            <LogOut size={20} />
+            {!collapsed && <span style={{ fontWeight: 500, fontSize: '0.9rem' }}>Disconnect</span>}
           </div>
         </Link>
       </div>
-      
-      {/* User Profile */}
-      {!collapsed && (
-        <div style={{ padding: '16px', margin: '0 16px 24px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent-secondary), var(--accent-tertiary))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-            ST
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <p style={{ fontWeight: 600, fontSize: '0.9rem', margin: 0, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>Strategist</p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: 0 }}>Pro Plan</p>
-          </div>
-        </div>
-      )}
     </motion.aside>
   );
 }

@@ -78,7 +78,8 @@ export default function LeadScoring() {
     setResult(null);
     
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/score_lead', formData);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const response = await axios.post(`${apiUrl}/api/score_lead`, formData);
       const contentStr = response.data.content;
       try {
         setResult(JSON.parse(contentStr));

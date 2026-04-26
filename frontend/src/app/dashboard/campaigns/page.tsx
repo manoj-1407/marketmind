@@ -31,7 +31,8 @@ export default function CampaignGenerator() {
     
     try {
       // Connects to the FastAPI Backend
-      const response = await axios.post('http://127.0.0.1:8000/api/generate_campaign', formData);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const response = await axios.post(`${apiUrl}/api/generate_campaign`, formData);
       setResult(response.data.content);
     } catch (error) {
       console.error(error);

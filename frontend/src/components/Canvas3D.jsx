@@ -10,8 +10,8 @@ function Particles(props) {
   
   // Generate random points in a sphere
   const sphere = useMemo(() => {
-    // Generate 5000 points
-    return random.inSphere(new Float32Array(5000 * 3), { radius: 1.5 });
+    // Generate 1500 points (reduced for performance)
+    return random.inSphere(new Float32Array(1500 * 3), { radius: 1.5 });
   }, []);
 
   useFrame((state, delta) => {
@@ -58,7 +58,7 @@ function CoreSphere() {
 
   return (
     <mesh ref={meshRef}>
-      <sphereGeometry args={[1, 64, 64]} />
+      <sphereGeometry args={[1, 32, 32]} />
       <meshStandardMaterial
         color="#06b6d4"
         wireframe={true}

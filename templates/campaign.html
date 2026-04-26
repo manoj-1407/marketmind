@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Generator - MarketMind Pro</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="nav-brand">
+            <span class="logo">M</span>
+            <span class="brand-name">MarketMind - Aikta</span>
+        </div>
+        <div class="nav-menu">
+            <a href="/">🏠 Home</a>
+            <a href="/campaign" class="active">📢 Campaign</a>
+            <a href="/pitch">💼 Pitch</a>
+            <a href="/lead-score">🎯 Lead Score</a>
+        </div>
+        <button id="themeToggle" class="theme-toggle">🌙</button>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>🚀 AI Campaign Generator</h1>
+            <p>Create professional, data-driven marketing campaigns with advanced targeting</p>
+        </header>
+
+        <div class="form-section">
+            <form id="campaignForm">
+                <!-- Basic Info -->
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="productInput">Product / Service *</label>
+                        <input type="text" id="productInput" placeholder="e.g., AI-powered CRM software" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="audienceInput">Target Audience *</label>
+                        <input type="text" id="audienceInput" placeholder="e.g., B2B SaaS founders, 30-50 years old" required>
+                    </div>
+                </div>
+
+                <!-- Advanced Options Toggle -->
+                <div class="advanced-toggle">
+                    <button type="button" id="advancedToggle" class="btn-secondary">
+                        ⚙️ Show Advanced Options
+                    </button>
+                </div>
+
+                <!-- Advanced Options Panel -->
+                <div id="advancedOptions" class="advanced-panel" style="display: none;">
+                    <h3>Campaign Parameters</h3>
+                    
+                    <div class="form-grid">
+                        <!-- Budget -->
+                        <div class="form-group">
+                            <label for="budgetInput">Budget (USD)</label>
+                            <select id="budgetInput">
+                                <option value="">Not specified</option>
+                                <option value="1000-5000">$1K - $5K</option>
+                                <option value="5000-10000">$5K - $10K</option>
+                                <option value="10000-25000">$10K - $25K</option>
+                                <option value="25000-50000">$25K - $50K</option>
+                                <option value="50000-100000">$50K - $100K</option>
+                                <option value="100000+">$100K+</option>
+                            </select>
+                        </div>
+
+                        <!-- Timeline -->
+                        <div class="form-group">
+                            <label for="timelineInput">Campaign Duration</label>
+                            <select id="timelineInput">
+                                <option value="">Not specified</option>
+                                <option value="1-week">1 Week</option>
+                                <option value="2-weeks">2 Weeks</option>
+                                <option value="1-month">1 Month</option>
+                                <option value="3-months">3 Months</option>
+                                <option value="6-months">6 Months</option>
+                                <option value="12-months">12 Months</option>
+                            </select>
+                        </div>
+
+                        <!-- Industry -->
+                        <div class="form-group">
+                            <label for="industryInput">Industry</label>
+                            <select id="industryInput">
+                                <option value="">Not specified</option>
+                                <option value="saas">SaaS / Software</option>
+                                <option value="ecommerce">E-commerce</option>
+                                <option value="finance">Finance / Insurance</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="education">Education</option>
+                                <option value="realestate">Real Estate</option>
+                                <option value="consulting">Consulting</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="retail">Retail</option>
+                                <option value="hospitality">Hospitality</option>
+                            </select>
+                        </div>
+
+                        <!-- Objective -->
+                        <div class="form-group">
+                            <label for="objectiveInput">Campaign Objective</label>
+                            <select id="objectiveInput">
+                                <option value="awareness">Brand Awareness</option>
+                                <option value="leads">Lead Generation</option>
+                                <option value="sales">Direct Sales</option>
+                                <option value="engagement">Engagement</option>
+                                <option value="retention">Customer Retention</option>
+                            </select>
+                        </div>
+
+                        <!-- Tone -->
+                        <div class="form-group">
+                            <label for="toneInput">Communication Tone</label>
+                            <select id="toneInput">
+                                <option value="professional">Professional</option>
+                                <option value="casual">Casual & Friendly</option>
+                                <option value="luxury">Luxury & Premium</option>
+                                <option value="aggressive">Aggressive / Urgent</option>
+                                <option value="empathetic">Empathetic</option>
+                                <option value="humorous">Humorous</option>
+                            </select>
+                        </div>
+
+                        <!-- Lead Goal -->
+                        <div class="form-group">
+                            <label for="leadGoalInput">Lead Target (optional)</label>
+                            <input type="number" id="leadGoalInput" placeholder="e.g., 500" min="1">
+                        </div>
+                    </div>
+
+                    <h3>Platform Selection</h3>
+                    <div class="platform-grid">
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="google" checked>
+                            <span>🔍 Google Ads</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="facebook">
+                            <span>📘 Facebook</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="instagram">
+                            <span>📸 Instagram</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="linkedin">
+                            <span>💼 LinkedIn</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="tiktok">
+                            <span>🎵 TikTok</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="youtube">
+                            <span>📺 YouTube</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="twitter">
+                            <span>🐦 Twitter/X</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="email">
+                            <span>📧 Email Marketing</span>
+                        </label>
+                    </div>
+
+                    <h3>Content Creation Options</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="contentTypeInput">Content Type</label>
+                            <select id="contentTypeInput">
+                                <option value="all">All Content Types</option>
+                                <option value="photo">📸 Photo Ads</option>
+                                <option value="video">🎥 Video Ads</option>
+                                <option value="carousel">📱 Carousel Ads</option>
+                                <option value="story">📖 Story Ads</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="visualStyleInput">Visual Style</label>
+                            <select id="visualStyleInput">
+                                <option value="professional">Professional</option>
+                                <option value="genz">Gen Z / Trendy</option>
+                                <option value="emotional">Emotional / Storytelling</option>
+                                <option value="luxury">Luxury / Premium</option>
+                                <option value="fun">Fun / Playful</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h3>Additional Options</h3>
+                    <div class="form-group full-width">
+                        <label for="competitorInput">Competitors (comma-separated)</label>
+                        <input type="text" id="competitorInput" placeholder="e.g., HubSpot, Salesforce, Zoho">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="uspInput">Unique Selling Proposition (USP)</label>
+                        <textarea id="uspInput" rows="2" placeholder="What makes your product unique?"></textarea>
+                    </div>
+
+                    <h3>Product Media (Optional)</h3>
+                    <div class="form-group full-width">
+                        <label for="productMediaInput">Upload Product Image/Video (Optional)</label>
+                        <div class="file-upload-zone" id="fileUploadZone">
+                            <div class="upload-icon">📎</div>
+                            <p class="upload-text">Drag & drop your product image or video here</p>
+                            <p class="upload-subtext">or click to browse (Max 10MB - JPG, PNG, MP4, MOV)</p>
+                            <input type="file" id="productMediaInput" accept="image/*,video/*" hidden>
+                            <button type="button" class="btn-secondary" onclick="document.getElementById('productMediaInput').click()">
+                                Choose File
+                            </button>
+                        </div>
+                        <div id="filePreview" class="file-preview hidden">
+                            <img id="imagePreview" class="media-preview" alt="Preview">
+                            <video id="videoPreview" class="media-preview" controls></video>
+                            <div class="file-info">
+                                <span id="fileName">No file selected</span>
+                                <button type="button" class="btn-icon" onclick="removeFile()" title="Remove file">✕</button>
+                            </div>
+                        </div>
+                        <small class="instruction-hint">💡 Upload your product image or demo video for AI to generate contextual campaigns</small>
+                    </div>
+
+                    <h3>AI Custom Instructions</h3>
+                    <div class="form-group full-width">
+                        <label for="aiInstructions">Tell AI Exactly What You Want (Optional)</label>
+                        <textarea id="aiInstructions" rows="5" placeholder="Examples:
+• 'Make it very Gen Z style with memes and trending phrases'
+• 'Focus on emotional storytelling for luxury clients'
+• 'Include specific pain points: high costs, slow processes'
+• 'Budget $10k, target 500 leads in 2 weeks with 5% CTR'
+• 'Use humor and casual tone for millennial audience'
+• 'Emphasize eco-friendly and sustainability aspects'
+
+Be as specific as possible - the more details, the better results!"></textarea>
+                        <small class="instruction-hint">💡 Pro tip: These instructions override all defaults and give you maximum control!</small>
+                    </div>
+
+                    <label class="platform-checkbox">
+                        <input type="checkbox" id="abTestingCheck">
+                        <span>Generate 3 A/B test variations</span>
+                    </label>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary" id="generateBtn">
+                        ✨ Generate Campaign
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="clearForm()">
+                        🔄 Clear
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Output Section -->
+        <div id="outputSection" class="output-section hidden">
+            <div class="output-header">
+                <h2>📊 Your Campaign Strategy</h2>
+                <div class="output-actions">
+                    <button onclick="copyOutput()" class="btn-icon" title="Copy to clipboard">📋</button>
+                    <button onclick="downloadPDF()" class="btn-icon" title="Download PDF">📄</button>
+                    <button onclick="saveTemplate()" class="btn-icon" title="Save as template">💾</button>
+                </div>
+            </div>
+            <div id="outputContent" class="output-content"></div>
+            <div class="output-footer">
+                <span id="wordCount">0 words</span>
+                <span id="estimatedCost"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>

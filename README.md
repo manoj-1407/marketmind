@@ -4,7 +4,7 @@
 
 MarketMind is a patentable, 3D-immersive enterprise platform designed to replace entire marketing departments. Built with Next.js, React Three Fiber, FastAPI, and powered by advanced Neural Network LLMs (Groq / LLaMA 3).
 
-![MarketMind Presentation](https://github.com/user-attachments/assets/preview.png) *(Add your preview image here)*
+![MarketMind Nexus-OS Hero](assets/hero.png)
 
 ## 🌟 Key Features
 

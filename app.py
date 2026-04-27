@@ -20,7 +20,12 @@ import database
 load_dotenv()
 
 models.Base.metadata.create_all(bind=database.engine)
-app = FastAPI(title="MarketMind Professional - AI Marketing Suite")
+# API initialization
+app = FastAPI(
+    title="MarketMind Nexus-OS API",
+    description="Strategic Business Intelligence and Marketing Automation Engine",
+    version="4.0.0"
+)
 
 # CORS Configuration
 app.add_middleware(
@@ -30,10 +35,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Static files and templates
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
 
 # Initialize Groq AI Client
 try:
@@ -48,28 +49,12 @@ except Exception as e:
 leads_df = pd.DataFrame()
 
 # ============================================
-# PAGE ROUTES
+# API ENDPOINTS
 # ============================================
 
-@app.get("/", response_class=HTMLResponse)
-async def dashboard(request: Request):
-    """Homepage with feature overview"""
-    return templates.TemplateResponse("index.html", {"request": request})
-
-@app.get("/campaign", response_class=HTMLResponse)
-async def campaign_page(request: Request):
-    """Campaign Generator Page"""
-    return templates.TemplateResponse("campaign.html", {"request": request})
-
-@app.get("/pitch", response_class=HTMLResponse)
-async def pitch_page(request: Request):
-    """Pitch Deck Generator Page"""
-    return templates.TemplateResponse("pitch.html", {"request": request})
-
-@app.get("/lead-score", response_class=HTMLResponse)
-async def leads_page(request: Request):
-    """Lead Scoring Page"""
-    return templates.TemplateResponse("lead_score.html", {"request": request})
+@app.get("/health")
+async def health_check():
+    return {"status": "online", "system": "Nexus-OS", "version": "4.0.0"}
 
 # ============================================
 # PYDANTIC MODELS (Request Validation)

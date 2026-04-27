@@ -74,5 +74,3 @@ npm run dev
 
 ## 🔐 Licensing & Patentability
 This codebase is architected with highly specific proprietary prompt-engineering logic and custom 3D web-GL implementations, positioning it well for enterprise SaaS deployment or IP filing.
-
-**Developed by Antigravity.**

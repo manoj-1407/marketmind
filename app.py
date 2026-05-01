@@ -115,6 +115,19 @@ class LeadRequest(BaseModel):
     engagement: Optional[str] = ""
     notes: Optional[str] = ""
 
+class CompetitorRequest(BaseModel):
+    domain: str
+
+class DiscoverRequest(BaseModel):
+    query: str
+
+class TaskRequest(BaseModel):
+    title: str
+    category: str
+    priority: str
+    status: Optional[str] = "Backlog"
+    due_date: Optional[str] = ""
+
 # ============================================
 # CAMPAIGN GENERATOR API - ULTRA CREATIVE
 # ============================================
@@ -1645,21 +1658,98 @@ Notes: {request.notes or 'None'}"""
 
 
 # ============================================
-# LEGACY / UTILITY ENDPOINTS
+# BUSINESS INTELLIGENCE ENGINES
 # ============================================
 
-@app.post("/upload_leads")
-async def upload_leads(file: UploadFile = File(...)):
-    """Bulk CSV upload for lead scoring"""
-    global leads_df
+@app.post("/api/analyze_competitor")
+async def api_analyze_competitor(request: CompetitorRequest):
+    print(f"🕵️ GHOST SCAN: {request.domain}")
+    if not client:
+        return {"error": "AI Engine Offline"}
+    
     try:
-        df = pd.read_csv(file.file)
-        leads_df = df
-        print(f"✅ Uploaded {len(df)} leads from CSV")
-        return {"total_leads": len(df), "columns": list(df.columns)}
+        completion = client.chat.completions.create(
+            model="llama3-70b-8192",
+            messages=[
+                {"role": "system", "content": "You are a corporate espionage and market intelligence agent. Analyze the given domain and provide a JSON report with weaknesses (list), marketShare (float), threatLevel (string), keywords (list), and strategy (string)."},
+                {"role": "user", "content": f"Analyze competitor domain: {request.domain}"}
+            ],
+            response_format={"type": "json_object"}
+        )
+        return eval(completion.choices[0].message.content)
     except Exception as e:
-        print(f"❌ CSV upload failed: {e}")
-        return {"error": str(e)}
+        print(f"❌ Ghost Scan Error: {e}")
+        return {
+            "weaknesses": ["Data ingestion failed", "Dynamic analysis blocked"],
+            "marketShare": 0.0,
+            "threatLevel": "Unknown",
+            "keywords": ["Error"],
+            "strategy": f"System error during infiltration: {str(e)}"
+        }
+
+@app.post("/api/prospect_radar")
+async def api_prospect_radar(request: DiscoverRequest):
+    print(f"📡 RADAR SCAN: {request.query}")
+    if not client:
+        return {"error": "AI Engine Offline"}
+    
+    try:
+        completion = client.chat.completions.create(
+            model="llama3-70b-8192",
+            messages=[
+                {"role": "system", "content": "You are a global market discovery engine. Based on the user query, generate a list of 4 high-potential 'prospects'. Each prospect should have: name, industry, location, revenue (string), and contact (string). Return as a JSON object with a 'leads' array."},
+                {"role": "user", "content": f"Scan for: {request.query}"}
+            ],
+            response_format={"type": "json_object"}
+        )
+        return eval(completion.choices[0].message.content)
+    except Exception as e:
+        print(f"❌ Radar Scan Error: {e}")
+        return {"leads": []}
+
+# ============================================
+# TASK & STRATEGY EXECUTION API
+# ============================================
+
+@app.get("/api/tasks")
+async def get_tasks(db: Session = Depends(database.get_db)):
+    return db.query(models.Task).all()
+
+@app.post("/api/tasks")
+async def create_task(request: TaskRequest, db: Session = Depends(database.get_db)):
+    new_task = models.Task(
+        title=request.title,
+        category=request.category,
+        priority=request.priority,
+        status=request.status,
+        due_date=request.due_date
+    )
+    db.add(new_task)
+    db.commit()
+    db.refresh(new_task)
+    return new_task
+
+@app.put("/api/tasks/{task_id}")
+async def update_task(task_id: int, request: TaskRequest, db: Session = Depends(database.get_db)):
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not task:
+        return {"error": "Task not found"}
+    task.title = request.title
+    task.category = request.category
+    task.priority = request.priority
+    task.status = request.status
+    task.due_date = request.due_date
+    db.commit()
+    return task
+
+@app.delete("/api/tasks/{task_id}")
+async def delete_task(task_id: int, db: Session = Depends(database.get_db)):
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not task:
+        return {"error": "Task not found"}
+    db.delete(task)
+    db.commit()
+    return {"status": "deleted"}
 
 @app.get("/leads")
 async def get_leads():

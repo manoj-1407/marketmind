@@ -2,32 +2,30 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Search, ShieldAlert, TrendingDown, Target, ExternalLink, BarChart2 } from 'lucide-react';
+import { Zap, Search, ShieldAlert, TrendingDown, Target, BarChart2, Loader2 } from 'lucide-react';
+import axios from 'axios';
 
 export default function CompetitorGhost() {
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState<any>(null);
+  const [domain, setDomain] = useState('');
 
-  const mockAnalysis = {
-    weaknesses: [
-      'Slow mobile load times (vulnerable to SEO churn)',
-      'High pricing for basic feature tier',
-      'No localized support for APAC region',
-      'Weak community engagement on social channels'
-    ],
-    marketShare: 14.2,
-    threatLevel: 'Medium-High',
-    keywords: ['CRM Automation', 'Sales Pipeline', 'Lead Gen'],
-    strategy: 'Leverage their slow customer support response time in your outreach. Position MarketMind as the "Instant Strategy" alternative.'
-  };
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
-  const runAnalysis = (e: React.FormEvent) => {
+  const runAnalysis = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setAnalysis(mockAnalysis);
+    setAnalysis(null);
+    
+    try {
+      const response = await axios.post(`${apiUrl}/api/analyze_competitor`, { domain });
+      setAnalysis(response.data);
+    } catch (error) {
+      console.error(error);
+      alert("Analysis failed. Ensure AI backend is online.");
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -46,15 +44,26 @@ export default function CompetitorGhost() {
         <form onSubmit={runAnalysis} style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
           <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Enter Competitor Domain</label>
           <div style={{ display: 'flex', gap: '16px' }}>
-            <input required type="text" placeholder="e.g. competitor.com" className="glass-input" style={{ flex: 1 }} />
-            <button type="submit" className="primary-button" style={{ padding: '0 40px' }} disabled={loading}>
-              {loading ? 'Infiltrating Systems...' : 'Ghost Analysis'}
+            <div style={{ flex: 1, position: 'relative' }}>
+              <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+              <input 
+                required 
+                type="text" 
+                value={domain}
+                onChange={(e) => setDomain(e.target.value)}
+                placeholder="e.g. competitor.com" 
+                className="glass-input" 
+                style={{ width: '100%', paddingLeft: '48px' }} 
+              />
+            </div>
+            <button type="submit" className="primary-button" style={{ padding: '0 40px', display: 'flex', gap: '8px', alignItems: 'center' }} disabled={loading}>
+              {loading ? <><Loader2 size={18} className="animate-spin" /> Infiltrating...</> : 'Ghost Analysis'}
             </button>
           </div>
         </form>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '32px', alignItems: 'start' }}>
         {/* Results Area */}
         <div className="glass-panel" style={{ padding: '32px', minHeight: '400px' }}>
           <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -64,7 +73,7 @@ export default function CompetitorGhost() {
           {analysis ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {analysis.weaknesses.map((w: string, i: number) => (
+                {analysis.weaknesses?.map((w: string, i: number) => (
                   <div key={i} style={{ display: 'flex', gap: '12px', padding: '16px', background: 'rgba(244, 63, 94, 0.05)', borderRadius: '12px', border: '1px solid rgba(244, 63, 94, 0.2)' }}>
                     <TrendingDown size={18} color="var(--accent-secondary)" />
                     <span style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>{w}</span>

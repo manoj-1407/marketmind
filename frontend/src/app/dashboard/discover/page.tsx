@@ -2,26 +2,30 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Search, Filter, MapPin, Building2, UserPlus, ExternalLink, Mail } from 'lucide-react';
+import { Globe, Search, Filter, MapPin, Building2, UserPlus, Mail, Loader2 } from 'lucide-react';
+import axios from 'axios';
 
 export default function ProspectingRadar() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<any[]>([]);
+  const [query, setQuery] = useState('');
 
-  const mockLeads = [
-    { name: 'TechFlow Solutions', industry: 'SaaS', location: 'Austin, TX', revenue: '$5M - $10M', contact: 'Mark Sterling (CEO)' },
-    { name: 'GreenEdge Logistics', industry: 'Supply Chain', location: 'Chicago, IL', revenue: '$12M - $25M', contact: 'Sarah Jenkins (COO)' },
-    { name: 'Nova Health AI', industry: 'HealthTech', location: 'San Francisco, CA', revenue: '$2M - $5M', contact: 'Dr. Leo Vance (Founder)' },
-    { name: 'Apex Retail Group', industry: 'E-commerce', location: 'New York, NY', revenue: '$50M+', contact: 'Rachel Moore (VP Marketing)' },
-  ];
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
-  const searchLeads = (e: React.FormEvent) => {
+  const searchLeads = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setResults(mockLeads);
+    setResults([]);
+    
+    try {
+      const response = await axios.post(`${apiUrl}/api/prospect_radar`, { query });
+      setResults(response.data.leads || []);
+    } catch (error) {
+      console.error(error);
+      alert("Radar scan failed. Ensure AI backend is online.");
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -41,45 +45,25 @@ export default function ProspectingRadar() {
         <form onSubmit={searchLeads} style={{ display: 'flex', gap: '16px' }}>
           <div style={{ flex: 1, position: 'relative' }}>
             <Search size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
-            <input required type="text" placeholder="e.g. B2B SaaS companies in California with Series A funding" className="glass-input" style={{ paddingLeft: '52px' }} />
+            <input 
+              required 
+              type="text" 
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="e.g. B2B SaaS companies in California with Series A funding" 
+              className="glass-input" 
+              style={{ width: '100%', paddingLeft: '52px' }} 
+            />
           </div>
-          <button type="submit" className="primary-button" style={{ padding: '0 32px' }} disabled={loading}>
-            {loading ? 'Scanning Global Data...' : 'Run Radar Scan'}
+          <button type="submit" className="primary-button" style={{ padding: '0 32px', display: 'flex', gap: '8px', alignItems: 'center' }} disabled={loading}>
+            {loading ? <><Loader2 size={18} className="animate-spin" /> Scanning Global Data...</> : 'Run Radar Scan'}
           </button>
         </form>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '32px', alignItems: 'start' }}>
-        {/* Filters */}
-        <div className="glass-panel" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Filter size={16} /> Filter Results
-          </h3>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Company Size</label>
-              <select className="glass-input" style={{ fontSize: '0.9rem' }}>
-                <option>All Sizes</option>
-                <option>1-50</option>
-                <option>51-200</option>
-                <option>201-1000</option>
-              </select>
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>Revenue Tier</label>
-              <select className="glass-input" style={{ fontSize: '0.9rem' }}>
-                <option>All Tiers</option>
-                <option>$1M - $5M</option>
-                <option>$5M - $20M</option>
-                <option>$20M+</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px', alignItems: 'start' }}>
         {/* Results */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', gridColumn: 'span 3' }}>
           {results.length > 0 ? results.map((lead, i) => (
             <motion.div 
               key={lead.name}
@@ -87,7 +71,7 @@ export default function ProspectingRadar() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               className="glass-panel"
-              style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+              style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}
             >
               <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
                 <div style={{ width: '48px', height: '48px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -117,8 +101,17 @@ export default function ProspectingRadar() {
             </motion.div>
           )) : (
             <div className="flex-center" style={{ minHeight: '300px', flexDirection: 'column', gap: '20px', opacity: 0.3 }}>
-              <Globe size={64} />
-              <p style={{ fontSize: '1.2rem' }}>Initiate a scan to discover global opportunities.</p>
+              {loading ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+                  <Globe size={64} className="animate-spin" />
+                  <p style={{ fontSize: '1.2rem' }}>Pulsing Market Radar...</p>
+                </div>
+              ) : (
+                <>
+                  <Globe size={64} />
+                  <p style={{ fontSize: '1.2rem' }}>Initiate a scan to discover global opportunities.</p>
+                </>
+              )}
             </div>
           )}
         </div>

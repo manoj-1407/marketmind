@@ -29,3 +29,13 @@ class Lead(Base):
     recommendation = Column(Text)
     reasoning = Column(Text)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class Task(Base):
+    __tablename__ = "tasks"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String)
+    category = Column(String)
+    priority = Column(String) # high, medium, low
+    status = Column(String, default="Backlog") # Backlog, In Progress, Completed
+    due_date = Column(String)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
